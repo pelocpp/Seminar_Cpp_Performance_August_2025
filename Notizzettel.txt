@@ -1,0 +1,422 @@
+C++ Performance Optimierung
+=============================
+
+Peter Loos
+
+peter.loos@gmx.de
+-----------------
+
+=============================
+
+Lamdba : auto oder std::function ??
+
+=============================
+
+
+Unterlagen:
+
+https://github.com/pelocpp
+
+https://github.com/pelocpp/cpp_clean_performant_secure/blob/master/Clean_Performant_Code/Performance_Optimization/Readme_Performance_Optimization.md
+
+=============================
+
+std::initializer_list
+----------------------
+
+Misunderstanding:
+
+Memberwise Initializer List
+
+
+
+std::initializer_list:    Stack
+
+std::vector:              Heap
+
+Stack ist performanter ===> bin schneller.
+
+Go for std::initializer_list // Parameter-Übergabe.
+
+=============================
+
+std::string / SSO
+-----------------
+
+Wo liegen die Zeichen eines std::string-Objekts ????
+
+
+Die Nutzdaten, also die Zeichen selbst, liegen auf dem Heap !
+
+Ausnahme:
+
+Optimierungstechnik:
+
+Kleine Zeichenketten ????
+
+Hängt vom Compiler / Bibliothek ab:
+
+===============================
+
+Ausprobieren:
+
+Online C++ Compiler
+
+https://wandbox.org/
+
+===============================
+
+std::string: 40 bytes ===> geht das auch mit weniger ???
+
+Frage:
+
+"Dies ist eine Zeichenkette"
+
+Wo liegt in der Ausführung diese Zeichenkette ????
+
+String Literal: Von welchem Typ ist ein String Literal
+
+const char* s = "Dies ist eine Zeichenkette";
+
+Bemerkung:
+
+In C // String Literal:
+
+char* s = "Dies ist eine Zeichenkette";
+s[0] = '?';  // C++: Error
+
+Heap: Nicht auf dem Heap.
+
+Code Segement: Jepp.
+Global Data Segment:  2 Arten : Initialisiert (.data)
+                      und nicht initialisiert (.bss)
+
+
+C++:
+
+const char* s = "Dies ist eine Zeichenkette";
+
+std::string s = "Dies ist eine Zeichenkette";   // Heap
+
+std::string_view s = "Dies ist eine Zeichenkette"; 
+   // da, const char* liegt
+
+Performanz:
+
+Warum sollen konstante Zeichenketten auf dem Heap abgelegt werden ???
+Da gibt es keinen Grund dafür
+
+==> std::string_view:
+
+Wie sieht std::string_view INTERN aus ???
+
+a) const char*
+b) Länge
+
+
+Wie sehen einzelne String-Funktionen
+im Vergleich aus:
+
+SubString
+Tail - letzten n Zeichen
+Head - ersten n Zeichen
+
+Go for string_view bei konstanten Zeichenketten
+
+=======================================
+
+Call-by-Value vs. Call-by-Referenz:
+
+Call-by-Value:
+    int m = n;
+00007FF6F00BCB2F  mov         eax,dword ptr [n]  
+00007FF6F00BCB35  mov         dword ptr [m],eax  
+
+Call-by-Ref:
+    int m = n;
+00007FF6F00BCB70  mov         rax,qword ptr [n]  
+00007FF6F00BCB77  mov         eax,dword ptr [rax]  
+00007FF6F00BCB79  mov         dword ptr [m],eax  
+
+
+Call-by-Ref ist ein INDIREKTER Zugriff:
+   das würde ich bei elem. Variablen 
+   eher nicht machen !
+
+Bei Objekten ist es genau anders herum
+Da kostet das Kopieren Laufzeit.
+Call-by-Ref ist hier besser 
+
+==============================================
+
+Schlagwort:
+
+Copy/Move Elision
+
+Elision: to elide ===> weglassen, auslassen.
+
+"Man kommt damit nicht direkt in Kontakt"
+
+https://github.com/pelocpp/cpp_modern/blob/master/GeneralSnippets/CopyMoveElision/CopyMoveElision.md
+
+Frage:
+
+static std::unique_ptr<int> loadUniquePointer()
+{
+    std::unique_ptr<int> emtpy;
+
+    std::unique_ptr<int> ptr{ std::make_unique<int>(100) };
+    
+    return std::move (ptr);  // gut / schlecht ????
+}
+
+
+return std::move (ptr);:   NIEMALS: 
+
+Der Compiler kann das selbst am besten:
+Ein Objekt zurückgeben -- hier nicht hinlangen !!!!
+
+==============================================
+
+constexpr 
+---------
+
+Kleine Runde:
+
+IIFE - Immediately Invoked Functional Expression
+
+Verbesserung:  Makros a la C
+
+==============================================
+
+Lamdbas:
+
+Man will Lambdas häufig einen Namen geben.
+
+== inline-Code
+
+== Zugriff auf Variablen aus dem umgebenden Scope
+
+=====================================================
+constexpr
+
+
+Ergibt constexpr Sinn bei std::vector oder std::string ???
+
+==> Haben ihre Daten auf dem Heap !!!
+
+Neues Konzept:
+
+Transiente Allokation
+---------------------
+
+New ist in im constexpr Kontext erlaubt,
+wenn im gleichen Scope das delete vorhanden ist.
+
+=================================================
+
+static void tueWas()
+{
+    int n = 1;
+    int m = 2;
+    int offset = 10;
+
+    auto l = [&n, m](int n) {
+        return n + offset;
+    };
+
+    auto result = l(20);
+}
+
+Capture Klausel:
+
+=    =>  KOPIE
+&    =>  REFERENZ
+
+Unbekannter // C++ 14:
+
+Verschieben // Move ????????????
+
+Geht auch.
+
+================================================
+
+Verschieben: Ist ja besser als Kopieren.
+
+Wenn Parameter von Funktion zu Funkion
+durchgereicht werden, könnte es passieren (unvorsichtig),
+dass eine Kopie reinrutscht.
+
+===> Perfekt Forwarding.
+
+https://github.com/pelocpp/cpp_modern/blob/master/Readme.md
+
+Klassische Typ:  &
+
+Neuer Typ        &&
+
+Wer ist T&&, wenn T ein Template Parameter ist:
+
+Universal Referenz.
+
+
+
+Referenz-Typ:
+
+Wozu // für welche Objekte:
+
+Für anonyme Objekte / ohne Namen.
+
+LValue ===> LValue 
+
+RValue ===> RValue 
+
+Performanz:  VERSCHIEBEN  // Nicht kopieren.
+
+Kochrezept:
+-----------
+
+A) Funktionstemplate: Muss T&& universelle Referenzen.
+
+B) Unterlagert weiterreichen: std::forward<>
+
+====================================================
+
+„Folding”-Ausdrücke
+
+Beispiel:
+
+1 + 2 + 3 + 4 + 5 + 6 + 7 + 8
+
+A) arithm. Ausdrücke
+
+b) Es wird nur EIN Operator verwendet.
+
+Hochperformante Umsetzungen/ Ausführungen:
+
+    int result = addierer(1, 2, 3, 4, 5, 6, 7, 8);
+
+A) Wie bekomme ich die Parameter an die Funktion übergeben
+
+B) Syntax des Folding-Ausdrucks
+
+https://github.com/pelocpp/cpp_modern/blob/master/GeneralSnippets/Folding/Folding.md
+
+===========
+
+C++: 
+
+i)  Core als Sprache
+ii) Generische Programmierung: Templates
+
+
+=====================================================
+
+Funktionale Programmierstil:
+
+Pro:  Keine Instanzvariablen.
+
+Umgekehrt:  Um in C++ optimieren zu können:
+
+====> const 
+
+=================================================================
+
+Speicher unter der Lupe:
+
+Debug-Mode:
+Zwischen zwei Variablen werden ca. 30 Füllbytes eingefügt.
+
+Mit dem Muster CC = 1100 1100 
+
+=========================================================
+
+CPU-Cache // Cache Line:
+
+Was hat das mit C++ zu tun ???????????????????
+
+Wenn es machbar ist:
+
+"Hüpfen" im Speicher soweit es geht vermeiden :)
+
+Beispiel:
+
+Matrix:  Okay, im Debug - Modus kann  man das beobachten.
+
+Im Release-Modus nicht.
+
+============================================================
+
+False Sharing
+
+
+============================================================
+
+Zusammenfassung:
+
+a) Cache Line: Nicht springen
+
+   ==> Cache Miss
+
+b) DIESELBE Cache-Line von mehrere Threads verwendet
+
+   ==> Cache Thrash
+
+============================================================
+
+Speicher:
+
+Wo kommt der Speicher her ???
+
+Heap:
+
+   Zugang indirekt // new //  std::malloc
+
+   Hier kümmert sich die Bibliothek darum.
+
+Globalen Datensegment:  
+
+   Direkter Zugang:
+
+   char* buffer [10000];
+
+   AUSRICHTUNG // Alignment ....
+
+Frage:
+
+Generell gilt:
+Die größten Datenelemente sollten am Anfang
+und die kleinsten am Ende platziert werden.
+Auf diese Weise lässt sich der durch das Padding
+verursachte Speicheraufwand minimieren.
+
+struct Document d;
+
+int* p = & d.m_id;
+
+
+
+class Document_V2
+{
+    double     m_rank;
+    int        m_id;
+    bool       m_isCached;
+};
+
+Konstruktor:
+
+
+class Document_V2
+{
+    Document_V2() 
+    : m_rank{ 1.0},m_id{}, m_isCached{false} , m_rank2{m_rank}
+    {}
+
+    double     m_rank;
+    int        m_id;
+    bool       m_isCached;
+    double     m_rank2;
+};
+
+================================================
+
