@@ -7,9 +7,40 @@
 #include <functional>
 #include <print>
 
+namespace Benchmarking_Lambda_vs_Std_Function_Vorbereitung {
+
+    auto product = [](int a, int b) -> int {
+        return a * b;
+    };
+
+    void rufeLambdaAuf()
+    {
+        auto result = product(3, 4);
+    }
+
+    void VerwendeStdFunction()
+    {
+        std::function< int(int, int) > f
+        ([](int a, int b) -> int {
+            return a * b;
+        });
+
+        auto result = f(3, 4);
+    }
+
+    // Go-for  auto
+    // Go-for  std::function
+
+    // Ist egal
+
+    // Performanz: std::function ist ein Wrapper / Hülle
+    // Langsamer: 
+}
+
+
 namespace Benchmarking_Lambda_vs_Std_Function {
 
-    static const size_t Iterations = 100000;
+    static const size_t Iterations = 1000000;
     static const size_t InnerIterations = 100;
 
     static double MyFunction(double input)
@@ -30,7 +61,7 @@ namespace Benchmarking_Lambda_vs_Std_Function {
         ScopedTimer watch{};
 
         for (size_t i{}; i != Iterations; ++i) {
-            auto total = 0.0;
+            auto volatile total = 0.0;
             for (size_t i{}; i != InnerIterations; ++i) {
                 total += lambda(total);
             }
@@ -44,14 +75,19 @@ namespace Benchmarking_Lambda_vs_Std_Function {
             return total;
         };
 
-        std::function<double(double)> func{ lambda };
+    //    std::function<double(double)> func{ lambda };
+
+        std::function<double(double)> func{ [](double input) {
+            auto total = input * 2.0 + 1.0;
+            return total;
+        } };
 
         std::println("StdFunctionWithLambda");
 
         ScopedTimer watch{};
 
         for (size_t i{}; i != Iterations; ++i) {
-            auto total = 0.0;
+            auto volatile total = 0.0;
             for (size_t i{}; i != InnerIterations; ++i) {
                 total += func(total);
             }
@@ -67,7 +103,7 @@ namespace Benchmarking_Lambda_vs_Std_Function {
         ScopedTimer watch{};
 
         for (size_t i{}; i != Iterations; ++i) {
-            auto total = 0.0;
+            auto volatile total = 0.0;
             for (size_t i{}; i != InnerIterations; ++i) {
                 total += func(total);
             }

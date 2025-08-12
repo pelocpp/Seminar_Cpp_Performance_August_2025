@@ -420,3 +420,135 @@ class Document_V2
 
 ================================================
 
+Laufzeiten
+
+Benchmarking:
+
+Mikro-Benchmarking
+------------------
+
+== Google Test
+
+
+
+Makro-Benchmarking
+------------------
+
+// =============================================
+
+A) Da kann regulärer C++ Code rein (Copy/Paste)
+
+B) #include's:
+
+   i)  Erst mal nicht.
+   ii) Wenn sie fehlen, ergänzen (<string_view>)
+
+C) Eine Funktion, die gestestet werden soll:
+
+   Hat einen speziellen Parameter:
+
+   benchmark::State& state
+
+D) Dieser Parameter wird verwendet:
+
+   
+   // Range-based For-Loop
+   for (auto _ : state) {
+
+E) Nebenbemerkung: Was ist _ ???
+
+   Wie ist ein Bezeichner definiert:
+   A..Z, a..z, _, 0..9
+
+   Was ist ein sehr kurzer Bezeichner:
+   n
+   _
+
+
+F) Alles INNERHALB dieser Range-based For-Loop
+   wird gemessen.
+
+G) Eine Funktion, deren Zeit gemessen werden soll,
+   muss REGISTRIERT werden:
+
+// Register the function as a benchmark
+BENCHMARK(StringCreation);
+
+=============================================================
+
+Issue:  Hmm, der zu testende Code wird "in erwarteter"
+        Weise optimiert.
+
+
+
+Abhilfe:
+
+a)  // Make sure the variable is not optimized away by compiler
+    benchmark::DoNotOptimize(created_string);
+
+b)  Gebrauch von volatile.
+
+Ist kontraproduktiv.
+
+
+=============================================================
+
+Beispiel:
+
+static int malZwei(int n) {
+    return 2 * n;
+}
+
+static void StringCreation(benchmark::State& state) {
+  // Code inside this loop is measured repeatedly
+  for (auto _ : state) {
+    std::string created_string("hello");
+    // Make sure the variable is not optimized away by compiler
+    benchmark::DoNotOptimize(created_string);
+  }
+}
+
+static void StringCopy(benchmark::State& state) {
+  // Code before the loop is not measured
+  std::string x = "hello";
+  for (auto _ : state) {
+    std::string copy(x);
+  }
+}
+
+BENCHMARK(StringCopy);
+BENCHMARK(StringCreation);
+
+===================================================
+
+Wie kann man ein Lambda-Objekt in
+einem Programm namentlich ansprechen:
+
+a) auto l = [] () {};
+
+b) 
+
+auto product = [] (int a, int b) -> int {
+    return a * b;
+};
+
+Bemerkung: Manchmal MUSS man std::function verwenden,
+wenn man Lambdas abspeichern möchte:
+Instanzvariablen von Objekten.
+
+
+Hinweis:
+
+Funktionszeiger:
+
+ int (*fp) (int, int);
+
+std::function< int (int, int) > f;
+
+Hilfestellung:
+
+Cpp Insights:
+
+https://cppinsights.io/
+
+Abbildung:  Quellcode Modern C++ ==>  Quellcode Classic C++
