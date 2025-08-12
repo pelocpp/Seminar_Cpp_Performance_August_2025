@@ -7,6 +7,22 @@
 #include "CustomAllocator.h"
 
 #include <vector>
+#include <memory>
+
+
+static void test_custom_allocator_test_value_type()
+{
+    using MyType = int;
+
+    using MyContainer = std::vector<MyType>;
+
+    MyContainer numbers;
+
+    MyContainer::value_type  n = 123;
+
+    numbers.push_back(n);
+}
+
 
 static void test_custom_allocator_01()
 {
@@ -18,6 +34,9 @@ static void test_custom_allocator_01()
 
     // use 'placement new' operator to construct a 'Person' object in place
     ::new (memory) Person{};
+
+    // Template Parameter Deduction
+    std::construct_at(memory, Person{ "Hans", "Mueller", 30});
 
     // destroy 'Person' instance
     std::destroy_at(memory);
@@ -34,6 +53,8 @@ static void test_custom_allocator_02()
 
     std::vector<int, CustomAllocator<int>> vec(alloc);
 
+    vec.reserve(3);
+
     // std::vector<int, CustomAllocator<int>> vec;  // works too
 
     vec.push_back(1);
@@ -49,9 +70,9 @@ static void test_custom_allocator_03()
 {
     std::vector<Person, CustomAllocator<Person>> vec;
 
-    vec.push_back({ "Sepp", "Mueller", 30 });
-    vec.push_back({ "Hans", "Wagner", 30 });
-    vec.push_back({ "Anton", "Meier", 30 });
+    vec.push_back(Person { "Sepp", "Mueller", 30 });
+    vec.push_back(Person { "Hans", "Wagner", 30 });
+    vec.push_back(Person { "Anton", "Meier", 30 });
 
     for (const auto& person : vec) {
         std::println("{} ", person);
@@ -86,10 +107,10 @@ static void test_custom_allocator_04()
 
 void test_custom_allocator()
 {
-    test_custom_allocator_01();
-    test_custom_allocator_02();
+//    test_custom_allocator_01();
+    //test_custom_allocator_02();
     test_custom_allocator_03();
-    test_custom_allocator_04();
+//    test_custom_allocator_04();
 }
 
 // ===========================================================================

@@ -11,6 +11,7 @@ namespace FixedBlockMemoryManagerTest {
     static void test_fixed_block_memory_manager_01()
     {
         const int ArenaLength = 40;
+
         static alignas(std::max_align_t) char arena[ArenaLength];
 
         FixedBlockMemoryManager<FixedArenaController> memoryManager{ arena };
@@ -69,9 +70,9 @@ void test_block_memory_manager()
 {
     using namespace FixedBlockMemoryManagerTest;
 
-    //test_fixed_block_memory_manager_01();
-    //test_fixed_block_memory_manager_02();
-    //test_fixed_block_memory_manager_03();
+    test_fixed_block_memory_manager_01();
+    test_fixed_block_memory_manager_02();
+    test_fixed_block_memory_manager_03();
     test_fixed_block_memory_manager_04();
 }
 

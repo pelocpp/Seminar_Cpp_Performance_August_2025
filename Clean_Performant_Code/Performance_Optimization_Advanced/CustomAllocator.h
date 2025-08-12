@@ -21,6 +21,8 @@ public:
 
     T* allocate(std::size_t n)
     {
+        T* dummy = nullptr;
+
         size_t numBytes{ n * sizeof(T) };
 
         std::println("Allocating {} bytes", numBytes);
@@ -28,7 +30,7 @@ public:
         if (n > std::numeric_limits<std::size_t>::max() / sizeof(T))
             throw std::bad_array_new_length();
 
-        if (auto p = static_cast<T*>(std::malloc(numBytes)))
+        if (auto p = static_cast<T*>(std::malloc  (numBytes)))
         {
             return p;
         }
@@ -46,7 +48,7 @@ public:
     void construct(U* p, TArgs&&... args)
     {
         std::println("Constructing element");
-        new(p) U(std::forward<TArgs>(args)...);
+        new(p) U{ std::forward<TArgs>(args)... };
     }
 
     template<typename U>

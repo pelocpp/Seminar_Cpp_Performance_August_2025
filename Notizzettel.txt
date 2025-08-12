@@ -8,7 +8,27 @@ peter.loos@gmx.de
 
 =============================
 
-Lamdba : auto oder std::function ??
+TbD:
+
+Algos ...
+Profiling ...
+
+=============================
+
+2 Ideen zum Nachdenken:
+-----------------------
+
+a) Allokator ==> Fixed-Block Allokatoren
+
+   Manager ===>  STL  //  new / delete 
+
+
+b) Object Pool
+
+   Ähnlichkeit: Alle Objekte in einem Pool haben diesselbe Größe.
+                und auch desselben Typs !!!
+
+   Wiederverwendet.
 
 =============================
 
@@ -552,3 +572,121 @@ Cpp Insights:
 https://cppinsights.io/
 
 Abbildung:  Quellcode Modern C++ ==>  Quellcode Classic C++
+
+===================================================
+===================================================
+
+Performanz
+
+===========> Speicherverwaltung:
+
+Bibliothek: new / delete / malloc / free
+
+Speicherverwaltung:
+
+Die Anforderungen Blöcke unterschiedlicher Größe.
+
+Ansätze:
+
+Was ist mit Blöcken gleicher größe ???
+
+==> Fixed-Size Block Allokatoren.
+
+Variable Ansatz: Standard-Pool (new/delete) rausnimmt.
+
+Wie ???
+
+C++: Hat nahezu alles offen gelegt:
+
+Speicher zu verwalten:
+
+STL
+
+std::vector<int>
+
+std::vector<int, Allocator>
+
+==> Welche Optionen bietet C++ / STL,
+um sich in den Zugang zum Speicher dazwischenzuschalten.
+
+==> Können wir das ausnutzen ???
+
+Skuriles Thema:
+
+Laundry // Zeiger "waschen" 
+
+Objekten / Klassen:   Kopien ...
+
+Klassen mit ...
+
+== Referenzen
+== const Elementen
+
+Hintergründe: std::launder
+
+================================================================
+
+Performanz Optimierung:
+
+Gebrauch des Schlüsselworts noexcept:
+
+noexcept ==> Kein Stack-Unwinding Code wird erzeugt.
+
+Wenn's kracht: terminate();
+
+Wann ist es denn gefahrlos:
+
+  == Methoden, die oder weniger nur aus Wertzuweisungen bestehen.
+  == getter
+
+
+================================================================
+
++		dummy	0x0000000000000000 <NULL>	std::_Container_proxy *
+
+std::_Container_proxy 
+
+================================================================
+
+Wie könnte man einen Allokator selbst schreiben:
+
+A) Für Fixed-Size Blöcke ist das nicht so schwer ....
+
+Was ist eine "Arena":   Ein großer Block von Speicher.
+
+
+
+==========================================================================
+
+2 Ideen zum Nachdenken:
+-----------------------
+
+a) Allokator ==> Fixed-Block Allokatoren
+
+   Manager ===>  STL  //  new / delete 
+
+
+b) Object Pool
+
+   Ähnlichkeit: Alle Objekte in einem Pool haben diesselbe Größe.
+                und auch desselben Typs !!!
+
+   Wiederverwendet.
+
+
++		dummy	0x0000000000000000 <NULL>	
+
+std::_Container_proxy *
+
+std::_Flist_node<double,void *> *
+
+
+Angepasst  // muss überprüft werden !!!
+
+==> Optimierungspotential: 
+
+Bei Blöcken derselben Größe.
+
+===============================================================
+
+

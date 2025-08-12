@@ -15,6 +15,8 @@
 class FixedArenaController
 {
 public:
+    // Konstruktor
+    // Template Member Function
     template <int N>
     FixedArenaController(char(&a)[N]);
 

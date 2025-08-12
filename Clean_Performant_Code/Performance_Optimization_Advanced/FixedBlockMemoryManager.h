@@ -73,6 +73,7 @@ template <typename TArena>
 inline void FixedBlockMemoryManager<TArena>::deallocate(void* p) {
     if (p == nullptr)
         return;
+
     auto fp = reinterpret_cast<free_block*>(p);
     fp->next = m_freePtr;
     m_freePtr = fp;

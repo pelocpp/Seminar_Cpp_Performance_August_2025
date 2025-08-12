@@ -7,10 +7,12 @@ extern void test_fixed_arena_controller();
 extern void test_block_memory_manager();
 extern void test_fixed_block_allocator();
 extern void test_object_pool();
+extern void test_std_launder();
 
 int main()
 {
-    //test_custom_allocator();
+   // test_std_launder();
+    // test_custom_allocator();
     //test_fixed_arena_controller();
     //test_block_memory_manager();
     test_fixed_block_allocator();

@@ -7,6 +7,7 @@
 namespace FixedArenaControllerTest {
 
     const int ArenaLength = 40;
+
     static alignas(std::max_align_t) char arena[ArenaLength];
 
     static void test_fixed_arena_controller_01()
@@ -23,6 +24,14 @@ namespace FixedArenaControllerTest {
 
 void test_fixed_arena_controller()
 {
+    //auto p = std::malloc(20);
+
+    ////auto p1 = static_cast<char*>(p);
+    ////p1++;
+
+    //free(p); 
+    //free(p);
+
     FixedArenaControllerTest::test_fixed_arena_controller_01();
 }
 
