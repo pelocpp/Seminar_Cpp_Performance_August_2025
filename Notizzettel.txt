@@ -951,3 +951,69 @@ struct NegativeNumber
 
 =================================================
 
+C++ Performance Optimierung:
+
+Multi-Threading // Concurrency:
+------------------------------------------
+
+
+Unterlagen siehe
+
+https://github.com/pelocpp/cpp_concurrency
+
+C++ Werkzeugkasten: 
+
+Grundlagen:   std::thread
+
+
+Windows:  Beendet sich der Primärthread einer Anwendung,  
+         dann werden alle Sekundärthreads ebenfalls beendet.
+
+
+=================================================
+
+== std::thread    // Klassen
+== std::jthread
+
+== std::async     // Funktion
+
+
+Was ist ein Nachteil eines "herkömmlichen" Threads ???????????
+
+Das ist ein Thread (OS), der nur EINMAL verwendet werden kann:
+
+Beispiel:
+
+WebService  // Socket-Server:
+
+Jedem Incoming Request einen Client-spezifischen Thread:
+
+CreateThread ist da KEINE Lösung.
+
+Thread Pool: 
+
+Steht std::async mit einem Thread Pool in Verbindung ??????????????????
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
