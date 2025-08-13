@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>17.0</VCProjectVersion>
+    <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{d6f9f1a6-1ed7-4104-8864-62d832fc0188}</ProjectGuid>
-    <RootNamespace>DataStructuresandAlgorithms</RootNamespace>
+    <ProjectGuid>{0f150a7f-862b-4ae1-9be3-5ebbcead6b3d}</ProjectGuid>
+    <RootNamespace>Coroutines</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -70,6 +70,18 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -77,7 +89,6 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,43 +143,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Algorithmen_Vergleich.cpp" />
-    <ClCompile Include="STL_Algorithms.cpp" />
-    <ClCompile Include="STL_Container.cpp" />
-    <ClCompile Include="Hashing.cpp" />
-    <ClCompile Include="ParallelArrays.cpp" />
+    <None Include="cpp_20_coroutine_vs_subroutine_01.svg" />
+    <None Include="cpp_20_coroutine_vs_subroutine_02.svg" />
+    <None Include="Literature.md" />
+    <None Include="Readme.md" />
+    <None Include="Readme_01_Introduction.md" />
+    <None Include="Readme_02_FirstSteps.md" />
+    <None Include="Readme_03_Yield_Return.md" />
+    <None Include="Readme_04_Awaiter_Awaitable.md" />
+    <None Include="Readme_05_Iterators.md" />
+    <None Include="Readme_09_Futures.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Coroutines_01_Introduction.cpp" />
+    <ClCompile Include="Coroutines_04_Awaiter_Awaitable.cpp" />
+    <ClCompile Include="Coroutines_05_Iterators.cpp" />
+    <ClCompile Include="Coroutines_09_Future.cpp" />
+    <ClCompile Include="Coroutines_02_FirstSteps.cpp" />
+    <ClCompile Include="Coroutines_08_Scratch.cpp" />
+    <ClCompile Include="Coroutines_10_Producer_Consumer.cpp" />
+    <ClCompile Include="Coroutines_20_Await_Suspend_Resume.cpp" />
+    <ClCompile Include="Coroutines_21_Yield.cpp" />
+    <ClCompile Include="Coroutines_23_Return.cpp" />
+    <ClCompile Include="Coroutines_24_Awaiter.cpp" />
+    <ClCompile Include="Coroutines_22_Yield_With_Iterator.cpp" />
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Coroutines_03_Yield_Return.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp_stl_algorithms_unexpected_exceptions_01.svg" />
-    <None Include="cpp_stl_algorithms_unexpected_exceptions_02.svg" />
-    <None Include="cpp_stl_container_overview.svg" />
-    <None Include="cpp_stl_container_array.svg" />
-    <None Include="cpp_stl_container_deque.svg" />
-    <None Include="cpp_stl_container_forward_list.svg" />
-    <None Include="cpp_stl_container_hash_table.svg" />
-    <None Include="cpp_stl_container_list.svg" />
-    <None Include="cpp_stl_container_overview_01.svg" />
-    <None Include="cpp_stl_container_queue.svg" />
-    <None Include="cpp_stl_container_span.svg" />
-    <None Include="cpp_stl_container_stack.svg" />
-    <None Include="cpp_stl_container_tree.svg" />
-    <None Include="cpp_stl_container_vector.svg" />
-    <None Include="cpp_stl_parallel_arrays.svg" />
-    <None Include="Readme_Big_O_Notation.md" />
-    <None Include="Readme_Data_Structures_and_Algorithms.md" />
-    <None Include="Readme_ParallelArrays.md" />
-    <None Include="Readme_STL_Algorithms.md" />
-    <None Include="Readme_STL_Container.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="cpp_stl_big_o_notation.png" />
-    <Image Include="Struct_Auth_Memory_Layout_Long_Variant_02.png" />
-    <Image Include="Struct_Auth_Memory_Layout_Short_Variant_02.png" />
-    <Image Include="Struct_User_Memory_Layout_Long_Variant_01.png" />
-    <Image Include="Struct_User_Memory_Layout_Long_Variant_02.png" />
-    <Image Include="Struct_User_Memory_Layout_Short_Variant_01.png" />
-    <Image Include="Struct_User_Memory_Layout_Short_Variant_02.png" />
+    <Image Include="C20_Coroutine_Stackless_Stackful.png" />
+    <Image Include="C20_Coroutine_vs_Function.png" />
+    <Image Include="consumer_producer_coroutine.png" />
+    <Image Include="coroutine.png" />
+    <Image Include="Coroutines_01_Toth.png" />
+    <Image Include="coroutine_awaitable_diagram.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

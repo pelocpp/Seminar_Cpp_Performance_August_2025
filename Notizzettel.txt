@@ -13,6 +13,9 @@ TbD:
 Algos ...
 Profiling ...
 
+
+Warum KÖNNEN / Sind Algorithmen besser ..............
+
 =============================
 
 2 Ideen zum Nachdenken:
@@ -658,22 +661,6 @@ Was ist eine "Arena":   Ein großer Block von Speicher.
 
 ==========================================================================
 
-2 Ideen zum Nachdenken:
------------------------
-
-a) Allokator ==> Fixed-Block Allokatoren
-
-   Manager ===>  STL  //  new / delete 
-
-
-b) Object Pool
-
-   Ähnlichkeit: Alle Objekte in einem Pool haben diesselbe Größe.
-                und auch desselben Typs !!!
-
-   Wiederverwendet.
-
-
 +		dummy	0x0000000000000000 <NULL>	
 
 std::_Container_proxy *
@@ -764,11 +751,203 @@ Makro-Benchmarking
 
 ==============================================================
 
-
 Profiling:
-
 
 1234 3232
 
+==============================================================
 
+2 Ideen zum Nachdenken:
+-----------------------
+
+a) Allokator ==> Fixed-Block Allokatoren
+   -------------------------------------
+
+   Fixed Block Allocator
+
+   Manager ===>  STL  //  std::list, std::forward_list, ..
+   Manager ===>  new / delete 
+
+
+b) Object Pool
+--------------
+
+   Ähnlichkeit: Alle Objekte in einem Pool haben diesselbe Größe.
+                und auch desselben Typs !!!
+
+   Der Pool kann eine "beliebige Anzahl" von Objekten 
+   halten: 
+
+   Diese werden nach Gebrauch nicht an das unterlagerte
+   OS zurückgegen (passivem Zustand).
+
+
+   ===================================================
+
+   C#:   Klasse Color  // Farben Farb-Objekte
+
+   Color red  {  FF, 0, 0 };
+
+   Color c = Color.FromRGB ( FF, 0, 0);
+
+===================================================
+
+Was ist der Vorteil eines solchen Pools:
+
+new / delete
+
+new (params)      => Speicher holen
+
+acquire (params)  => vorhandenen Speicher zuweisen
+
+Frage // Antwort:
+
+Man kann das "punktuell" sehen.
+
+ABER: 
+
+Es wurden VIELE unterschiedliche Anforderungen
+an das Mem. Management bereits gestellt.
+
+Sitution: Speicher: Defragmentierung // Zersplitterung.
+
+Hat ein new IMMER DIESELBE Laufzeit ???
+Sitution im vorh. Memory die Laufzeit sich ändern ???
+
+===================================================
+
+Go for Algorithms:
+------------------
+
+std::iota  // Algorithmen
+
+Motivieren ...  
+
+===================================================
+
+Coroutines:
+-----------
+
+"Der neueste Schrei in C++"
+
+Coroutines haben mit Multithreading
+keinen direkten Bezug.
+
+https://github.com/pelocpp/cpp_23/blob/master/Programs/01_Coroutines/Readme.md
+
+
+01: std::vector<int> getNumbers(int begin, int end)
+02: {
+03:     std::vector<int> numbers;
+04: 
+05:     for (int i = begin; i <= end; ++i) {
+06:         numbers.push_back(i);
+07:     }
+08: 
+09:     return numbers;
+10: }
+
+Stilistik:  Gierig // Greedy // Eager Algorithmus
+
+“lazy”-Strategie
+
+Kontrollfluss zwischen einem Produzenten (Coroutine) und einem Konsumenten (Anwendung).
+
+Beispiele:
+
+Socket:   Warten auf Verbinding // eine Verbindung bedienen
+
+Parsen // Übersetzen:
+
+== Eingabe zerleben // getNextToken
+
+== Syntax überprüfen ... ein Token nach dem anderen
+
+== Produzenten // Konsumenten Szenario
+
+======================================================
+
+Wehrmutstropfen:
+
+Ich muss ein Coroutinen-Interface
+implementieren // bereitstellen.
+
+Kontrakt:
+
+a) Typ 'promise_type' muss vorhanden sein.
+
+b) Ein std::coroutine_handle<promise_type> muss vorhanden sein.
+
+   == destroy // stackless // Heap // Ende: destroy
+
+c) Ein bestimmtes Interface bedienen:
+
+   resume:
+
+   Kann an resume des unterlagerten Promise-Objekts
+   weiter geleitet werden.
+
+
+Zur Klasse 'promise_type':
+
+== get_return_object
+
+   Liefert ein Interface-Objekt zurück.
+
+   Promise Typ ist als Absender enthalten.
+
+
+
+
+
+Zum Warten:
+
+co_await std::suspend_always{};    // Immer warten
+
+co_await std::suspend_never{};    // Nie warten
+
+
+Hin- und her:
+
+2 Beteiligte
+
+Beide wollen möglicht unabhängig voneinander arbeiten:
+
+==> resume 
+
+<== yield
+
+==============================================
+
+Performanz:
+
+STL: Überarbeitung.
+
+===> Bibliothk  std::ranges.
+
+https://github.com/pelocpp/Seminar_Cpp_Performance_August_2025/blob/master/Clean_Performant_Code/Ranges/Readme_Ranges.md
+
+Wie arbeiten Views - im Gegensatz zur STL:
+
+LAZY.
+
+===========================================
+
+struct NegativeNumber
+{
+    bool operator== (std::input_iterator auto iter) const {
+        return *iter < 0;
+    }
+};
+
+template <typename T>
+    required std::is_same<T, std::input_iterator>
+struct NegativeNumber
+{
+    bool operator== (T iter) const {
+        return *iter < 0;
+    }
+};
+
+=================================================
 

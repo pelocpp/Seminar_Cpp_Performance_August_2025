@@ -22,10 +22,12 @@
 // shared_ptr is destroyed and its reference count reaches 0.
 template <typename T, typename TAllocator = std::allocator<T>>
 class ObjectPool final
+
+
 {
 private:
     // number of T instances that should fit in the first allocated chunk
-    static constexpr std::size_t InitialChunkSize{ 4 };
+    static constexpr std::size_t InitialChunkSize{ 2 };
 
 public:
     // c'tor / d'tor
@@ -40,6 +42,7 @@ public:
     ObjectPool& operator=(ObjectPool&&) = delete;
 
     // reserves and returns an object from the pool
+    // acquireObject is special: template member method
     template <typename... TArgs>
     std::shared_ptr<T> acquireObject(TArgs&&... args);
 
@@ -98,7 +101,7 @@ std::shared_ptr<T> ObjectPool<T, TAllocator>::acquireObject(TArgs&& ... args)
     // Initialize, i.e. construct, an instance of T in an
     // uninitialized block of memory using placement new, and
     // perfectly forward any provided arguments to the constructor.
-    ::new(object) T{ std::forward<TArgs>(args)... };
+    ::new(object) T{ std::forward<TArgs>(args) ... };
 
     // Launder the object pointer.
     T* constructedObject{ std::launder(object) };
@@ -135,6 +138,11 @@ void ObjectPool<T, TAllocator>::addChunk()
 
     // Create pointers to each individual object in the new chunk
     // and store them in the list of free objects.
+    // wir hatten eine Annahme: addChunk wird aufgerufen,
+    // wenn freeObject LEER ist -- also size = 0 ist.
+    // HIer wurde ALLGEMEINER implementiert:
+    // addChunk kann auch aufgerufen werden, wenn die freeList
+    // NICHT leer ist.
     auto oldFreeObjectsSize{ m_freeObjects.size() };
 
     m_freeObjects.resize(oldFreeObjectsSize + m_currentChunkSize);
@@ -145,8 +153,9 @@ void ObjectPool<T, TAllocator>::addChunk()
         m_pool.back()
     );
 
-    // alternative implementation to setup the m_freeObjects list
+    //// alternative implementation to setup the m_freeObjects list
     //for (std::size_t i{}; i != m_currentChunkSize; ++i) {
+    //    // + i  ==  + sizeof(T) bytes
     //    m_freeObjects[oldFreeObjectsSize + i] = m_pool.back() + i;
     //}
 

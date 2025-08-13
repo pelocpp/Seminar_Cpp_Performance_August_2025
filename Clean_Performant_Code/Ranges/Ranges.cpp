@@ -96,13 +96,53 @@ namespace Ranges {
         std::vector<int> numbers = { 1, 2, 3, 4, 5, 6 };
 
         auto result = numbers
-            | std::views::filter([](auto n) { return n % 2 == 0; })
-            | std::views::transform([](auto n) { return n * 2; });
+            | std::views::filter([](auto n) {
+            return n % 2 == 0; 
+            })
+            | std::views::transform([](auto n) {
+            return n * 2; 
+            });
 
         for (auto n : result) {
             std::print("{} ", n);
         }
     }
+
+
+    static void ranges_range_adaptors_classic_way()
+    {
+        std::vector<int> numbers = { 1, 2, 3, 4, 5, 6 };
+
+        std::vector<int> resultOfFiltering;
+
+        std::copy_if(
+            numbers.begin(),
+            numbers.end(),
+            std::back_inserter(resultOfFiltering),
+            [](auto n) { 
+                return n % 2 == 0;
+            }
+        );
+
+        std::vector<int> result;
+
+        std::transform(
+            resultOfFiltering.begin(),
+            resultOfFiltering.end(),
+            std::back_inserter(result),
+            [](auto n) { return n * 2; }
+        );
+        
+
+        //auto result = numbers
+        //    | std::views::filter([](auto n) { return n % 2 == 0; })
+        //    | std::views::transform([](auto n) { return n * 2; });
+
+        for (auto n : result) {
+            std::print("{} ", n);
+        }
+    }
+
 
     // =======================================================================
     // Function Composition, Pipelines
@@ -139,10 +179,15 @@ namespace Ranges {
     {
         std::vector<int> numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
-        auto result = numbers | std::views::filter([](auto n) { return n % 2 == 0; })
+        auto result = numbers 
+            | std::views::filter([](auto n) { return n % 2 == 0; })
             | std::views::transform([](auto n) { return n * n; })
             | std::views::take(4)
             | std::views::reverse;
+
+        for (auto n : result) {
+            std::print("{} ", n);
+        }
 
         for (auto n : result) {
             std::print("{} ", n);
@@ -151,7 +196,7 @@ namespace Ranges {
 
     static void ranges_composition_of_views()
     {
-        ranges_composition_of_views_01();
+      //  ranges_composition_of_views_01();
         ranges_composition_of_views_02();
     }
 
@@ -429,7 +474,9 @@ namespace Ranges {
             numbers.begin(),
             NegativeNumber{},   // <== sentinel
             numbers.begin(),
-            [](const auto& n) { return n * n; }
+            [](const auto& n) { 
+                return n * n;
+            }
         );
 
         for (auto elem : numbers) {
@@ -504,10 +551,14 @@ namespace Ranges {
 
     static void ranges_dangling_iterators_01()
     {
-        // auto pos = std::ranges::find( getData(), 123); 
-        
-        // Error: You cannot dereference an operand of type 'std::ranges::dangling'
-        // std::println("{} ", *pos);  
+       // auto pos = std::ranges::find( getData(), 123); 
+
+        const auto& tmp = getData();
+
+        auto pos = std::ranges::find(tmp, 123);
+
+        //Error: You cannot dereference an operand of type 'std::ranges::dangling'
+         std::println("{} ", *pos);  
     }
 
     static void ranges_dangling_iterators_02()
@@ -719,23 +770,25 @@ void ranges_clean_code_examples()
 {
     using namespace Ranges;
 
+   // ranges_range_adaptors_classic_way();
+
     //comparison_iterators_vs_ranges();
     //ranges_example_concepts();
     //ranges_views();
     //ranges_range_adaptors();
-    //ranges_composition_of_views();
+    ranges_composition_of_views();
     //ranges_lazy_evaluation();
     //ranges_eager_evaluation();
     //ranges_bounded_vs_unbounded_range();
     //ranges_lazy_primes();
     //ranges_projections();
-    //ranges_sentinels();
-    //ranges_dangling_iterators();
-    //ranges_keys_view_and_values_view();
+  //  ranges_sentinels();
+ //   ranges_dangling_iterators();
+    //ranges_keys_view_and_values_view_02();
     //ranges_common_view();
     //ranges_all_of_any_of_none_of();
-    //ranges_example_variant();
-    ranges_example_unordered_map();
+   // ranges_example_variant();
+    //ranges_example_unordered_map();
 }
 
 // ===========================================================================

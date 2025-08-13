@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Readme.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Readme_02_FirstSteps.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Readme_09_Futures.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Readme_01_Introduction.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="cpp_20_coroutine_vs_subroutine_01.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="cpp_20_coroutine_vs_subroutine_02.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Readme_03_Yield_Return.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Literature.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Readme_04_Awaiter_Awaitable.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Readme_05_Iterators.md">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Program.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_01_Introduction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_09_Future.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_02_FirstSteps.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_03_Yield_Return.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_04_Awaiter_Awaitable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_08_Scratch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_05_Iterators.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_10_Producer_Consumer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_20_Await_Suspend_Resume.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_21_Yield.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_23_Return.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_24_Awaiter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coroutines_22_Yield_With_Iterator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Coroutines_01_Toth.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="C20_Coroutine_Stackless_Stackful.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="C20_Coroutine_vs_Function.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="coroutine.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="coroutine_awaitable_diagram.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="consumer_producer_coroutine.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

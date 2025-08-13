@@ -107,7 +107,9 @@ static void processDataEx(const std::vector<int>& data)
         return value < 50 || value > 100;
     };
 
-    const bool allInRange{ std::all_of(data.begin(), data.end(), inRange) };
+    const bool allInRange{ 
+        std::all_of(data.begin(), data.end(), inRange) 
+    };
 
     if (allInRange) {
         processMoreData(data);

@@ -39,6 +39,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Performance_Optimization_Ad
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fragen_Sonstiges", "Clean_Performant_Code\Fragen_Sonstiges\Fragen_Sonstiges.vcxproj", "{C6D8ADF4-B7C2-4CAB-94A8-4FD485E787DF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Coroutines", "Clean_Performant_Code\Coroutines\Coroutines.vcxproj", "{0F150A7F-862B-4AE1-9BE3-5EBBCEAD6B3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -119,6 +121,14 @@ Global
 		{C6D8ADF4-B7C2-4CAB-94A8-4FD485E787DF}.Release|x64.Build.0 = Release|x64
 		{C6D8ADF4-B7C2-4CAB-94A8-4FD485E787DF}.Release|x86.ActiveCfg = Release|Win32
 		{C6D8ADF4-B7C2-4CAB-94A8-4FD485E787DF}.Release|x86.Build.0 = Release|Win32
+		{0F150A7F-862B-4AE1-9BE3-5EBBCEAD6B3D}.Debug|x64.ActiveCfg = Debug|x64
+		{0F150A7F-862B-4AE1-9BE3-5EBBCEAD6B3D}.Debug|x64.Build.0 = Debug|x64
+		{0F150A7F-862B-4AE1-9BE3-5EBBCEAD6B3D}.Debug|x86.ActiveCfg = Debug|Win32
+		{0F150A7F-862B-4AE1-9BE3-5EBBCEAD6B3D}.Debug|x86.Build.0 = Debug|Win32
+		{0F150A7F-862B-4AE1-9BE3-5EBBCEAD6B3D}.Release|x64.ActiveCfg = Release|x64
+		{0F150A7F-862B-4AE1-9BE3-5EBBCEAD6B3D}.Release|x64.Build.0 = Release|x64
+		{0F150A7F-862B-4AE1-9BE3-5EBBCEAD6B3D}.Release|x86.ActiveCfg = Release|Win32
+		{0F150A7F-862B-4AE1-9BE3-5EBBCEAD6B3D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
