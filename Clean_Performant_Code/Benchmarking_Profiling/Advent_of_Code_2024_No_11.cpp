@@ -272,28 +272,28 @@ public:
             // ---------------------------------------------------------------
             /* original version: seems to be a hot spot */
             
-            else if (hasEvenDigits(pebble)) {
+            //else if (hasEvenDigits(pebble)) {
 
-                const auto [leftHalf, rightHalf] = splitPebble(pebble);
-                *pos = leftHalf;
-                m_pebbles.insert_after(pos, rightHalf);
-                m_size++;
-
-                ++pos; // skip new right half
-            }
-            
-            // ---------------------------------------------------------------
-            /* change from splitPebble to splitPebbleEx and splitPebbleExEx */
-            
-            //else if (auto result = hasEvenDigitsEx(pebble); result.first) {
-
-            //    const auto [leftHalf, rightHalf] = splitPebbleEx(pebble, result.second);  // <== splitPebbleEx or splitPebbleExEx
+            //    const auto [leftHalf, rightHalf] = splitPebble(pebble);
             //    *pos = leftHalf;
             //    m_pebbles.insert_after(pos, rightHalf);
             //    m_size++;
 
             //    ++pos; // skip new right half
             //}
+            
+            // ---------------------------------------------------------------
+            /* change from splitPebble to splitPebbleEx and splitPebbleExEx */
+            
+            else if (auto result = hasEvenDigitsEx(pebble); result.first) {
+
+                const auto [leftHalf, rightHalf] = splitPebbleExEx(pebble, result.second);  // <== splitPebbleEx or splitPebbleExEx
+                *pos = leftHalf;
+                m_pebbles.insert_after(pos, rightHalf);
+                m_size++;
+
+                ++pos; // skip new right half
+            }
             
             else {
                 *pos *= 2024;

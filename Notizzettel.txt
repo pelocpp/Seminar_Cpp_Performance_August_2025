@@ -689,4 +689,86 @@ Bei Blöcken derselben Größe.
 
 ===============================================================
 
+Memory Manager:
+---------------
+
+STL: Als / Hinter einem Allokator 
+     in bestimmten STL-Klassen einbauen.
+
+     Geht nicht mit jeder STL-Klasse:
+
+
+    std::vector<> mit Anforderungen
+    unterschiedlicher Größe ist da nicht geeignet.
+
+An Klassen: new / delete: Spezialisieren.
+
+
+===========================
+
+Kann man Zeiger // new // Arena auf 
+Plausibilität überprüfen ???
+
+Schwache Option:
+
+static const size_t ArenaSize = 8'000;    // needed for new / delete examples
+static alignas(std::max_align_t) char arena[ArenaSize]{};
+
+
+if (ptr >= arena && ptr <= arena + ArenaSize)  ...
+
+==> new bzgl. des Systems.
+
+
+Freigabe:
+
+if (ptr >= arena && ptr <= arena + ArenaSize)  ...
+   Freigabe mit der Arena
+else
+   delete ptr;
+
+Warum ist klassen-spezifisches new / delete incl. Arena
+sehr viel schneller ????
+
+Was ist das generelle Problem:
+
+Speicherverwaltung: 
+
+Blöcke unterschiedlicher Größe:
+
+==============================================================
+
+new
+
+delete
+
+std::malloc
+
+std:free
+
+A) Blöcke:  4k
+
+Arena:
+
+Zweite Arena nachgeladen.
+
+GlobalAlloc // LocalAlloc
+-----------
+
+
+==============================================================
+
+Mikro-Benchmarking
+
+Makro-Benchmarking
+
+==============================================================
+
+
+Profiling:
+
+
+1234 3232
+
+
 
