@@ -994,12 +994,251 @@ Thread Pool:
 
 Steht std::async mit einem Thread Pool in Verbindung ??????????????????
 
+================================================
+
+RAII  ==> Idee
+
+https://github.com/pelocpp/cpp_design_patterns/blob/master/Patterns/RAII_Idiom/Resources/Readme.md
+
+Resource ==> Mutex 
+
+("problematisch" in der Anwendung // es können sich leicht Fehler einschleichen)
+
+Fehlende LOCK.
+
+Idee:
+
+== Versteckt ein Mutex in einer Hüllenklasse
+== Konstruktor ==> .lock 
+== Destruktor  ==>  .unlock
+
+Wenn ein Hüllenklassen-Objekt am STACK liegt,
+wird es am Ende des Scopes zustört // Destruktor  - Aufruf DETERMINISTISCH.
 
 
+==================================================================
 
 
+Mehrere Threads:
+
+A) Probleme können entstehen, wenn auf gemeinsame Daten zugegriffen wird:
+
+    Konkurrenz
+
+B) Kooperation:
+
+    std::latch:    wait // count_down
+
+    std::condition_variable
+
+   Ein Thread Kooperiert mit einem zweiten Thread.
+
+    wait // notify
+
+Kooperation:  Immer wieder nachschauen // Polling.  // Kostet Laufzeit
 
 
+=================================================================
+
+
+std::function               ==> Hülle / Wrapper für Funktionen
+
+std::packaged_task   ==> Hülle / Wrapper für Funktionen
+
+Man erhält ein std::future Objekt
+
+Frage: Why ...
+
+std::packaged_task ist geeignet, um im Kontext eines Threads ausgeführt zu werden.
+
+std::thread ==>  Das Callable startet sofort ....
+
+Mit der std::packaged_task  kann man ein Callable "zusammenstellen" uns später
+ausführen ...
+
+
+===========================================================
+
+ Nochmals nebenläufige Ausführung: Klasse std::jthread
+
+ std::jthread
+
+j = join  
+
+Nicolai M. Josuttis    
+
+    Die Klasse std::jthread ist eine Spezialisierung der Klasse std::thread.
+
+Vorteile.
+
+
+===========================================================
+
+Mutex:
+
+Lesen  // Schreiben:  NICHT GLEICHZEITIG.
+
+==> 2 wollen Lesen.
+
+std::shared_mutex und std::shared_lock
+
+
+=========================================================
+
+
+Was sind lost and spurious wakeups:
+
+                // is stack full? (Note: lost and spurious wakeups)
+                m_conditionIsFull.wait(
+                    guard,
+                    [this] () -> bool { return m_size < QueueSize; }
+                );
+
+==>
+
+In computing, a spurious wakeup occurs when a thread wakes up from waiting on a condition variable and finds that the condition is still unsatisfied.
+
+It is referred to as spurious because the thread has seemingly been awoken "for no reason".
+
+Why:   "for no reason"
+
+C++ muss / will sein Konzept std::condition_variable
+auf VIELE UNTERLAGERTE BETRIEBSSYSTEME abbilden. / umsetzen.
+
+==============================================================
+
+Threadsicherer Stapel (Threadsafe Stack):
+
+
+ConcurrentStack<T> Class:  C#, NICHT IN C++.
+
+
+============================================================
+
+Realisierung einer Ereigniswarteschlange (Event Loop )
+
+
+Eine Ereigniswarteschlange (engl. Event Loop )
+kann man als Alternative zu einem Mutex-Objekt betrachten. 
+
+Was ist in diesem Beispiel ein Ereignis:
+
+Damit ist ein Funktionsaufruf samt vorhandenen Parametern gemeint.
+
+==>  Funktionen kann man doch DIREKT aufrufen!
+
+a) Sequentiell ausführen ....  Langläufer .... alles läuft der Reihe nach ab
+
+b) Parallel:   Langläufer - Problem gelöst  ...
+
+    Aber neues Problem: Gemeinsame Daten.
+
+    Sperre:  Mutex ===> Serialisierung  ===> a) Sequentieller Ablauf.
+
+Konflikt:
+
+i) Mutex.  ==> b)
+
+ii) Sequentielle Ausführung:  Warteschlange, die Funktionsaufrufe abspeichert
+            und der Reihe nach ausführt.
+
+   ==> Ziel: EventLoop realisieren.
+
+Zahlreiche Konzepte in einer Umsetzung / Anwendung betrachten.
+
+=====
+
+Notizen:
+
+    using Event = std::function<void()>;
+
+a) std::function : Geht dann nicht anders, wenn man Callable's AUFHEBEN möchte.
+
+  auto l = [] () { ... };
+
+
+b)     std::vector< std::function<void()> >        m_events;
+
+c)     void():  No Return, keine Daten: ABWARTEN. "We can do better"
+
+
+d)    void EventLoop::enqueue(const  std::function<void()>& callable)
+
+
+Nebenbemerkung:  Auch alle Container der STL wie std::vector gibt es NICHT Thread-Safe.
+
+e)   Von VIELEN Threads aus kann ge-enqueued werden.
+
+f) NUR IN EINEM Thread werden die Callables ausgeführt.
+
+   ==> No Mutex NOTWENDIG !!!!
+
+g)
+
+Instanzvariable:
+
+    std::vector<Event>        m_events;
+
+Lokale Variable:
+
+    std::vector<Event>    events;
+
+h) Wie kann ich möglichst schnell / effizient einen Vektor austauschen ???
+
+
+Instanzvariable:
+
+    std::vector<Event>        m_events ====> lokale Variable  ====> m_events leer sein.
+
+Lokale Variable:
+
+    std::vector<Event>    events  ==> m_events 
+
+Schnelle Funktion:   std::swap.
+
+i) Wie sieht es hiermit aus ???????????????
+
+    void():  No Return, keine Daten: ABWARTEN. "We can do better"
+
+    Callable  // isPrime
+
+     std::function
+
+    std::function  ==> Lambda
+
+    By the Way: Auch ein Lambda kann in einem  std::function abgelegt werden.	
+
+
+j) Wie könnte man return Values auch noch haben:
+
+   a)  std::function ========> std::packaged_task
+
+   b) std::packaged_task ==> std::future ==> Abspeichern ==> get Ergebnisse abholen.
+
+
+======================================================================
+
+Win32 Event Loop:
+
+
+   Was beschreibt die:  HWND, ID, WPARAM , LPARAM
+
+======================================================================
+
+   Callables // Aufrufbare Funktionen:
+
+   Freie Funktion  ....
+
+   Lambdas
+
+   std::function 
+
+   std::bind:    the function template std::bind generates a forwarding call wrapper for f
+
+
+==========
+
+ std::packaged_task : Ist ebenfalls eine HÜLLE ======>   std::future.
 
 
 
